@@ -22,14 +22,15 @@ LIBPATHS= \
  -L"$(LIB_DIR)/lib" 
 
 LIBS= \
- -l boost_system \
- -l boost_filesystem \
- -l boost_program_options \
- -l boost_thread_win32 \
- -l boost_chrono \
- -l db_cxx \
- -l ssl \
- -l crypto
+ "$(LIB_DIR)/lib/libboost_system.a" \
+ "$(LIB_DIR)/lib/libboost_filesystem.a" \
+ "$(LIB_DIR)/lib/libboost_program_options.a" \
+ "$(LIB_DIR)/lib/libboost_thread_w32.a" \
+ "$(LIB_DIR)/lib/libboost_chrono.a" \
+ "$(LIB_DIR)/lib/libdb_cxx.a" \
+ "$(LIB_DIR)/lib/libssl.a" \
+ "$(LIB_DIR)/lib/libcrypto.a" \
+ "$(LIB_DIR)/lib/libminiupnpc.a"
 
 DEFS=-D_MT -DWIN32 -D_WINDOWS -DBOOST_THREAD_USE_LIB -DBOOST_SPIRIT_THREADSAFE
 DEBUGFLAGS=-g
@@ -38,11 +39,6 @@ LDFLAGS=-Wl,--dynamicbase -Wl,--nxcompat -static-libgcc -static-libstdc++ -stati
 
 ifndef USE_UPNP
 	override USE_UPNP = -
-endif
-ifneq (${USE_UPNP}, -)
-	LIBPATHS += -L"$(DEPSDIR)/miniupnpc"
-	LIBS += -l miniupnpc -l iphlpapi
-	DEFS += -DSTATICLIB -DUSE_UPNP=$(USE_UPNP)
 endif
 
 ifneq (${USE_IPV6}, -)
