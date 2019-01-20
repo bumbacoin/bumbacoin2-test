@@ -4,7 +4,7 @@
 
 TARGET_PLATFORM:=i686
 #TARGET_PLATFORM:=x86_64
-LIB_DIR:=/deps/mingw-u686
+LIB_DIR:=/deps/mingw-i686
 CC:=$(TARGET_PLATFORM)-w64-mingw32-gcc
 CXX:=$(TARGET_PLATFORM)-w64-mingw32-g++
 RANLIB=$(TARGET_PLATFORM)-w64-mingw32-ranlib
