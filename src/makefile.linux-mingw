@@ -4,8 +4,7 @@
 
 TARGET_PLATFORM:=i686
 #TARGET_PLATFORM:=x86_64
-
-DEPSDIR:=/usr/$(TARGET_PLATFORM)-w64-mingw32
+LIB_DIR:=/deps/mingw-i686
 CC:=$(TARGET_PLATFORM)-w64-mingw32-gcc
 CXX:=$(TARGET_PLATFORM)-w64-mingw32-g++
 RANLIB=$(TARGET_PLATFORM)-w64-mingw32-ranlib
@@ -17,38 +16,30 @@ USE_IPV6:=1
 INCLUDEPATHS= \
  -I"$(CURDIR)" \
  -I"$(CURDIR)"/obj \
- -I"$(DEPSDIR)/boost_1_55_0" \
- -I"$(DEPSDIR)/db-6.0.20/build_unix" \
- -I"$(DEPSDIR)/openssl-1.0.1f/include" \
- -I"$(DEPSDIR)"
+ -I"$(LIB_DIR)/include"
 
 LIBPATHS= \
- -L"$(DEPSDIR)/boost_1_55_0/stage/lib" \
- -L"$(DEPSDIR)/db-6.0.20/build_unix" \
- -L"$(DEPSDIR)/openssl-1.0.1f"
+ -L"$(LIB_DIR)/lib" 
 
 LIBS= \
- -l boost_system-mt \
- -l boost_filesystem-mt \
- -l boost_program_options-mt \
- -l boost_thread_win32-mt \
- -l boost_chrono-mt \
- -l db_cxx \
- -l ssl \
- -l crypto
+ "$(LIB_DIR)/lib/libboost_system.a" \
+ "$(LIB_DIR)/lib/libboost_filesystem.a" \
+ "$(LIB_DIR)/lib/libboost_program_options.a" \
+ "$(LIB_DIR)/lib/libboost_thread_win32.a" \
+ "$(LIB_DIR)/lib/libboost_chrono.a" \
+ "$(LIB_DIR)/lib/libdb_cxx.a" \
+ "$(LIB_DIR)/lib/libssl.a" \
+ "$(LIB_DIR)/lib/libcrypto.a" \
+ "$(LIB_DIR)/lib/libminiupnpc.a" \
+ "$(LIB_DIR)/lib/libpthreadGC2.a"
 
 DEFS=-D_MT -DWIN32 -D_WINDOWS -DBOOST_THREAD_USE_LIB -DBOOST_SPIRIT_THREADSAFE
 DEBUGFLAGS=-g
 CFLAGS=-O3 -msse2 -w -Wall -Wextra -Wno-ignored-qualifiers -Wformat -Wformat-security -Wno-unused-parameter $(DEBUGFLAGS) $(DEFS) $(INCLUDEPATHS)
-LDFLAGS=-Wl,--dynamicbase -Wl,--nxcompat -static-libgcc -static-libstdc++
+LDFLAGS=-Wl,--dynamicbase -Wl,--nxcompat -static-libgcc -static-libstdc++ -static
 
 ifndef USE_UPNP
 	override USE_UPNP = -
-endif
-ifneq (${USE_UPNP}, -)
-	LIBPATHS += -L"$(DEPSDIR)/miniupnpc"
-	LIBS += -l miniupnpc -l iphlpapi
-	DEFS += -DSTATICLIB -DUSE_UPNP=$(USE_UPNP)
 endif
 
 ifneq (${USE_IPV6}, -)
@@ -61,6 +52,17 @@ LIBS += -l mingwthrd -l kernel32 -l user32 -l gdi32 -l comdlg32 -l winspool -l w
 HEADERS = $(wildcard *.h)
 
 OBJS= \
+    obj/groestl.o \
+    obj/blake.o \
+    obj/bmw.o \
+    obj/skein.o \
+    obj/keccak.o \
+    obj/shavite.o \
+    obj/jh.o \
+    obj/luffa.o \
+    obj/cubehash.o \
+    obj/echo.o \
+    obj/simd.o \
     obj/alert.o \
     obj/version.o \
     obj/checkpoints.o \
@@ -112,6 +114,9 @@ DEFS += -DHAVE_BUILD_INFO
 
 obj/%.o: %.cpp $(HEADERS)
 	$(CXX) -c $(CFLAGS) -o $@ $<
+
+obj/%.o: %.c 
+	$(CC) -c $(CFLAGS) -o $@ $<
 
 bumbacoin2d.exe: $(OBJS:obj/%=obj/%)
 	$(CXX) $(CFLAGS) $(LDFLAGS) -o $@ $(LIBPATHS) $^ $(LIBS) -lshlwapi
