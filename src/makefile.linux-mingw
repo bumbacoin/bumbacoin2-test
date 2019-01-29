@@ -25,7 +25,7 @@ LIBS= \
  "$(LIB_DIR)/lib/libboost_system.a" \
  "$(LIB_DIR)/lib/libboost_filesystem.a" \
  "$(LIB_DIR)/lib/libboost_program_options.a" \
- "$(LIB_DIR)/lib/libboost_thread_w32.a" \
+ "$(LIB_DIR)/lib/libboost_thread_win32.a" \
  "$(LIB_DIR)/lib/libboost_chrono.a" \
  "$(LIB_DIR)/lib/libdb_cxx.a" \
  "$(LIB_DIR)/lib/libssl.a" \
