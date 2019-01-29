@@ -30,7 +30,8 @@ LIBS= \
  "$(LIB_DIR)/lib/libdb_cxx.a" \
  "$(LIB_DIR)/lib/libssl.a" \
  "$(LIB_DIR)/lib/libcrypto.a" \
- "$(LIB_DIR)/lib/libminiupnpc.a"
+ "$(LIB_DIR)/lib/libminiupnpc.a" \
+ "$(LIB_DIR)/lib/libpthreadGC2.a"
 
 DEFS=-D_MT -DWIN32 -D_WINDOWS -DBOOST_THREAD_USE_LIB -DBOOST_SPIRIT_THREADSAFE
 DEBUGFLAGS=-g
