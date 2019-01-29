@@ -114,6 +114,9 @@ DEFS += -DHAVE_BUILD_INFO
 obj/%.o: %.cpp $(HEADERS)
 	$(CXX) -c $(CFLAGS) -o $@ $<
 
+obj/%.o: %.c 
+	$(CC) -c $(CFLAGS) -o $@ $<
+
 bumbacoin2d.exe: $(OBJS:obj/%=obj/%)
 	$(CXX) $(CFLAGS) $(LDFLAGS) -o $@ $(LIBPATHS) $^ $(LIBS) -lshlwapi
 	$(STRIP) bumbacoin2d.exe
